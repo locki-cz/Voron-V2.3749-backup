@@ -1,0 +1,5 @@
+saved_variables.cfg
+/home/pi/printer_data/config/telegram_config.conf
+adxl_results/belts/*.csv
+adxl_results/vibrations/*.tar.gz
+telegram_config.conf
