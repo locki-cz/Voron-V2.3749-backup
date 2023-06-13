@@ -1,4 +1,4 @@
-## Enraged Rabbit : Carrot Feeder config file with config for EASY-BRD mcu
+## Enraged Rabbit : Carrot Feeder config file with config for {brd_type} mcu
 ##
 ## EASY-BRD Setup Notes:
 ## J6 Jumper setting:
@@ -26,25 +26,26 @@ serial: /dev/serial/by-id/usb-Klipper_samd21g18a_73EB08C23331555020312E351B3108F
 # Please adapt these values to the motor you are using
 # Example : for NEMA17 motors, you'll usually set the stealthchop_threshold to 0
 # and use higher current
-[tmc2209 manual_extruder_stepper gear_stepper]
+[tmc2209 manual_stepper gear_stepper]
 uart_pin: ercf:PA8
 uart_address: 0
 interpolate: True
-run_current: 0.7			# NEMA14 motor
+run_current: 0.8			# NEMA17 moons motor
 hold_current: 0.1			# Can be small
 sense_resistor: 0.110
-stealthchop_threshold: 0		# 999999 to enable stealthChop
+stealthchop_threshold: 999999		# 999999 to enable stealthChop
 
-[manual_extruder_stepper gear_stepper]
+[manual_stepper gear_stepper]
 step_pin: ercf:PA4
 dir_pin: !ercf:PA10
 enable_pin: !ercf:PA2
-rotation_distance: 22.7316868		# Bondtech 5mm Drive Gears. Must be manually verified and tuned.
+#rotation_distance: 22.7316868
+rotation_distance: 23.2999789		# Bondtech 5mm Drive Gears. Must be manually verified and tuned
 gear_ratio: 80:20
-microsteps: 8 				# Recommend 8 or 16. Try both to avoid Klipper 'Timer too close' error (also try adjusting num_moves)
+microsteps: 16 				# Recommend 8 or 16. Try both to avoid Klipper 'Timer too close' error (also try adjusting num_moves)
 full_steps_per_rotation: 200		# 200 for 1.8 degree, 400 for 0.9 degree
-velocity: 200  #100
-accel: 800     #400
+velocity: 50
+accel: 400
 #
 # Uncomment if you want to use sensorless SELECTOR with the ERCF EASY BRD (yes, this is on the gear stepper!)
 # This should be the pin of the physical selector endstop and is used to determine the difference between the true
@@ -76,7 +77,7 @@ rotation_distance: 40
 microsteps: 16 			# Don't need high fidelity
 full_steps_per_rotation: 200	# 200 for 1.8 degree, 400 for 0.9 degree
 velocity: 200
-accel: 1200   #600
+accel: 600
 #
 # Select the endstop switch physical (for normal selector) or virtual (sensorless selector homing)
 #endstop_pin: tmc2209_selector_stepper:virtual_endstop	# Uncomment for sensorless selector homing
@@ -95,12 +96,13 @@ maximum_pulse_width: 0.00215
 ## The encoder_resolution is determined by running the ERCF_CALIBRATE_ENCODER. Be sure to read the manual
 [ercf_encoder ercf_encoder]
 encoder_pin: ^ercf:PA6			# EASY-BRD: ^ercf:PA6, Flytech ERB: ^ercf:gpio22
-encoder_resolution: 1.339226	# Set AFTER 'rotation_distance' is tuned for gear stepper (see manual)
+#encoder_resolution: 1.339226	# Set AFTER 'rotation_distance' is tuned for gear stepper (see manual)
+encoder_resolution: 1.372370
+extruder: extruder		# The extruder to track with for runout/clog detection
 
 # These are advanced but settings for Automatic clog detection mode. Make sure you understand or ask questions on Discord
-desired_headroom: 8.0		# The runout headroom that ERCF will attempt to maintain (closest ERCF comes to triggering runout)
+desired_headroom: 5.0		# The runout headroom that ERCF will attempt to maintain (closest ERCF comes to triggering runout)
 average_samples: 4		# The "damping" effect of last measurement. Higher value means clog_length will be reduced more slowly
-flowrate_samples: 10		# How many "movements" on the encoder to measure over for flowrate calc
 
 
 ## TOOLHEAD SENSOR ---------------------------------------------------------------------------------------------------------
@@ -111,4 +113,5 @@ flowrate_samples: 10		# How many "movements" on the encoder to measure over for 
 #pause_on_runout: False		# Must be False
 #switch_pin: {dummy_pin_must_set_me}
 ## ERCF Toolhead sensor END
+
 
